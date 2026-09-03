@@ -1,2 +1,5 @@
-    flask
-    gunicorn
+Flask
+gunicorn
+google-generativeai
+python-dotenv
+requests   
