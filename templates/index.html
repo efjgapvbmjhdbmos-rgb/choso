@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>معرض أعمالي - m;ostafa</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: #000; color: #FFD700; font-family: 'Cairo', Arial, sans-serif; overflow-x: hidden; }
+
+    /* شاشة الصلاة على النبي */
+    #prayerScreen {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #000;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: fadeOut 1s ease-in 2s forwards; /* هتختفي بعد 2 ثانية */
+    }
+    #prayerScreen h1 {
+      font-size: 4rem;
+      text-shadow: 0 0 20px #FFD700, 0 0 40px #ff0000;
+      animation: glow 2s ease-in-out infinite alternate;
+      margin-bottom: 30px;
+    }
+    #prayerScreen p {
+      font-size: 1.5rem;
+      color: #ccc;
+      animation: fadeIn 1s;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 10px #FFD700, 0 0 20px #ff0000; }
+      to { text-shadow: 0 0 30px #FFD700, 0 0 60px #ff0000; }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    .hero {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* الدخان الاحمر */
+    .smoke {
+      position: absolute;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, #ff000066 0%, transparent 70%);
+      border-radius: 50%;
+      animation: smokeRise 5s ease-in-out infinite;
+      filter: blur(20px);
+      z-index: 1;
+    }
+    .smoke:nth-child(2) { animation-delay: 1s; width: 350px; height: 350px; }
+    .smoke:nth-child(3) { animation-delay: 2s; width: 450px; height: 450px; }
+    
+    @keyframes smokeRise {
+      0% { transform: translateY(0) scale(0.5); opacity: 0; }
+      50% { opacity: 0.6; }
+      100% { transform: translateY(-300px) scale(1.5); opacity: 0; }
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      border: 3px solid transparent;
+      border-top: 3px solid #ff0000;
+      border-bottom: 3px solid #ff0044;
+      border-radius: 50%;
+      animation: rotate 4s linear infinite;
+      filter: blur(2px);
+      box-shadow: 0 0 30px #ff0000;
+      z-index: 2;
+    }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .choso-img {
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #ff0000;
+      position: relative;
+      z-index: 3;
+      animation: eyeGlow 2s ease-in-out infinite alternate;
+      box-shadow: 0 0 40px #ff0000;
+    }
+
+    @keyframes eyeGlow {
+      0% { box-shadow: 0 0 20px #ff0000, 0 0 40px #ff0000; }
+      100% { box-shadow: 0 0 40px #ff0000, 0 0 80px #ff0044, 0 0 100px #ff0044; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 4;
+    }
+
+    .hero h1 { 
+      font-size: 2.5rem; 
+      margin-top: 20px;
+      text-shadow: 0 0 10px #FFD700, 0 0 20px #ff0000; 
+      animation: fadeIn 2s;
+    }
+    .hero p { 
+      font-size: 1.2rem; 
+      margin-bottom: 30px;
+      color: #ccc;
+      animation: fadeIn 2.5s;
+    }
+    .btn {
+      background: #FFD700;
+      color: #000;
+      padding: 15px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+      transition: 0.3s;
+      box-shadow: 0 0 20px #FFD700;
+      animation: fadeIn 3s;
+    }
+    .btn:hover { transform: scale(1.1); box-shadow: 0 0 40px #FFD700, 0 0 60px #ff0000; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    header { text-align: center; padding: 30px 0; border-bottom: 2px solid #FFD700; }
+    h2 { font-size: 2.5rem; text-shadow: 0 0 10px #FFD700; }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .card {
+      background: #111;
+      border: 2px solid #FFD700;
+      border-radius: 15px;
+      overflow: hidden;
+      transition: 0.4s;
+      cursor: pointer;
+    }
+    .card:hover { transform: translateY(-15px) scale(1.03); box-shadow: 0 0 30px #FFD700; }
+    .card img { width: 100%; height: 250px; object-fit: cover; display: block; transition: 0.4s; }
+    .card:hover img { transform: scale(1.1); }
+    .card-info { padding: 15px; text-align: center; }
+    .card-info h3 { font-size: 1.3rem; margin-bottom: 5px; color: #FFD700; }
+    .card-info p { font-size: 0.95rem; color: #ccc; }
+
+    footer { text-align: center; padding: 40px 20px; border-top: 2px solid #FFD700; }
+    .whatsapp {
+      background: #25D366;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.2rem;
+      display: inline-block;
+      margin-top: 15px;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 999;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.95);
+      justify-content: center;
+      align-items: center;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border: 3px solid #FFD700;
+      border-radius: 10px;
+      box-shadow: 0 0 50px #FFD700;
+    }
+    .lightbox .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 40px;
+      color: #FFD700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- شاشة الصلاة على النبي -->
+  <div id="prayerScreen">
+    <h1>صل على النبي ﷺ</h1>
+    <p>ثواني و هندخل...</p>
+  </div>
+
+  <div id="mainContent">
+    <section class="hero">
+      <div class="smoke"></div>
+      <div class="smoke"></div>
+      <div class="smoke"></div>
+      
+      <img src="../static/images/choso.jpg" class="choso-img" alt="Choso">
+      
+      <div class="hero-content">
+        <h1>✨ مرحبا بيك في معرض m;ostafa ✨</h1>
+        <p>اشكال ديكور يدوية 100% بلمسة دهبي</p>
+        <a href="#gallery" class="btn">شوف شغلي</a>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <header><h2>معرض أعمالي</h2></header>
+      <div class="gallery">
+        <div class="card" onclick="openLightbox('../static/images/work1.jpg')">
+          <img src="../static/images/work1.jpg"><div class="card-info"><h3>الفازة الملكية</h3><p>تصميم كلاسيك بلمسة دهبي فاخر</p></div>
+        </div>
+        <div class="card" onclick="openLightbox('../static/images/work2.jpg')">
+          <img src="../static/images/work2.jpg"><div class="card-info"><h3>الجوهرة البيضاء</h3><p>قطعة فنية تجريدية للصالون</p></div>
+        </div>
+        <div class="card" onclick="openLightbox('../static/images/work3.jpg')">
+          <img src="../static/images/work3.jpg"><div class="card-info"><h3>نور الشرق</h3><p>صينية دهبي باطار فني</p></div>
+        </div>
+        <div class="card" onclick="openLightbox('../static/images/work4.jpg')">
+          <img src="../static/images/work4.jpg"><div class="card-info"><h3>تراث</h3><p>قطعة ديكور مستوحاة من التراث</p></div>
+        </div>
+        <div class="card" onclick="openLightbox('../static/images/work5.jpg')">
+          <img src="../static/images/work5.jpg"><div class="card-info"><h3>وردة الصحراء</h3><p>فازة ورد يدوية لا تذبل</p></div>
+        </div>
+        <div class="card" onclick="openLightbox('../static/images/work6.jpg')">
+          <img src="../static/images/work6.jpg"><div class="card-info"><h3>همسة دهب</h3><p>لوحة فنية بخط يدوي</p></div>
+        </div>
+        <div class="card" onclick="openLightbox('../static/images/work7.jpg')">
+          <img src="../static/images/work7.jpg"><div class="card-info"><h3>ضي القمر</h3><p>فازة زجاج بتصميم فريد</p></div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <h3>عجبك شغلي؟</h3>
+      <p>كلمني واتساب واطلب اللي يعجبك</p>
+      <a href="https://wa.me/201034361240" target="_blank" class="whatsapp">📱 كلمني واتساب: 01034361240</a>
+      <p style="margin-top: 20px;">© 2026 m;ostafa</p>
+    </footer>
+  </div>
+
+  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+    <span class="close">&times;</span>
+    <img id="lightbox-img" src="">
+  </div>
+
+  <script>
+    // بعد سانيتين اخفي الشاشة السودا
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('prayerScreen').style.display = 'none';
+      }, 2000);
+    });
+
+    function openLightbox(src) {
+      document.getElementById('lightbox').style.display = 'flex';
+      document.getElementById('lightbox-img').src = src;
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').style.display = 'none';
+    }
+  </script>
+
+</body>
+</html>
